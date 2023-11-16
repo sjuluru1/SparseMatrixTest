@@ -21,13 +21,13 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t "$DOCKER_USERNAME"/Sparse:"${CIRCLE_SHA1}" .
+            docker build -t "$DOCKER_USERNAME"/sparse:"${CIRCLE_SHA1}" .
 
       - run:
           name: Push Docker Image to Docker Hub
           command: |
             echo "$DOCKER_Password" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker push "$DOCKER_USERNAME"/Sparse:"${CIRCLE_SHA1}"
+            docker push "$DOCKER_USERNAME"/sparse:"${CIRCLE_SHA1}"
 
 
 workflows:

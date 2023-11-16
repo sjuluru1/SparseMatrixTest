@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class SparseMatrix:
     def __init__(self, rows, columns):
         self.matrix = {}  # Use a dictionary to store non-zero elements

@@ -1,72 +1,34 @@
-# version: 2.1
-
-# jobs:
-#   hello-job:
-#     docker:
-#       - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout
-
-#       - name: Set up Python
-#         uses: actions/setup-python
-#         with:
-#           python-version: 3.1
-
-#       - name: Install dependencies
-#         run: pip install -r requirements.txt
-
-#       - name: Run tests
-#         run: pytest test_sparse_recommender.py
-
-# workflows:
-#   my-workflow:
-#     jobs:
-#       - hello-job
-
-# version: 2.1
-
-# jobs:
-#   test-job:
-#     docker:
-#       - image: cimg/node:17.2.0
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-
-#       - name: Set up Python
-#         uses: actions/setup-python@v2
-#         with:
-#           python-version: 3.1
-
-#       - name: Install dependencies
-#         run: |
-#           pip install -r requirements.txt
-
-#       - name: Run tests
-#         run: |
-#           pytest test_sparse_recommender.py
-
-# workflows:
-#   my-workflow:
-#     jobs:
-#       - test-job
-
 version: 2.1
 
 jobs:
   setup-and-test:
-    machine:
-      image: ubuntu-2204:2022.07.1
+    docker:
+     - image: circleci/python:3.8
 
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+          
       - run:
           name: Install Dependencies
-          command: pip install -r requirements.txt
+          command: pip install pytest && pip install numpy
+
       - run:
           name: Run Tests
           command: pytest test_sparse_recommender.py
+
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t "$DOCKER_USERNAME"/sparse:"${CIRCLE_SHA1}" .
+
+      - run:
+          name: Push Docker Image to Docker Hub
+          command: |
+            echo "$DOCKER_Password" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker push "$DOCKER_USERNAME"/sparse:"${CIRCLE_SHA1}"
+
 
 workflows:
   Setup_and_Test:

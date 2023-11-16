@@ -1,42 +1,53 @@
-# version: 2.1
-
-# jobs:
-#   hello-job:
-#     docker:
-#       - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
-#     steps:
-#       - checkout # check out the code in the project directory
-#       - run: echo "hello world" # run the `echo` command
-
-# workflows:
-#   my-workflow:
-#     jobs:
-#       - hello-job
-
 version: 2.1
 
 jobs:
-  test-job:
+  hello-job:
     docker:
-      - image: cimg/node:17.2.0
+      - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python
         with:
           python-version: 3.1
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run tests
-        run: |
-          pytest test_sparse_recommender.py
+        run: pytest test_sparse_recommender.py
 
 workflows:
   my-workflow:
     jobs:
-      - test-job
+      - hello-job
+
+# version: 2.1
+
+# jobs:
+#   test-job:
+#     docker:
+#       - image: cimg/node:17.2.0
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Set up Python
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: 3.1
+
+#       - name: Install dependencies
+#         run: |
+#           pip install -r requirements.txt
+
+#       - name: Run tests
+#         run: |
+#           pytest test_sparse_recommender.py
+
+# workflows:
+#   my-workflow:
+#     jobs:
+#       - test-job

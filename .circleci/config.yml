@@ -1,28 +1,28 @@
-version: 2.1
+# version: 2.1
 
-jobs:
-  hello-job:
-    docker:
-      - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
-    steps:
-      - name: Checkout code
-        uses: actions/checkout
+# jobs:
+#   hello-job:
+#     docker:
+#       - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout
 
-      - name: Set up Python
-        uses: actions/setup-python
-        with:
-          python-version: 3.1
+#       - name: Set up Python
+#         uses: actions/setup-python
+#         with:
+#           python-version: 3.1
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt
 
-      - name: Run tests
-        run: pytest test_sparse_recommender.py
+#       - name: Run tests
+#         run: pytest test_sparse_recommender.py
 
-workflows:
-  my-workflow:
-    jobs:
-      - hello-job
+# workflows:
+#   my-workflow:
+#     jobs:
+#       - hello-job
 
 # version: 2.1
 
@@ -51,3 +51,24 @@ workflows:
 #   my-workflow:
 #     jobs:
 #       - test-job
+
+version: 2.1
+
+jobs:
+  setup-and-test:
+    machine:
+      image: ubuntu-2204:2022.07.1
+
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: Run Tests
+          command: pytest test_sparse_recommender.py
+
+workflows:
+  Setup_and_Test:
+    jobs:
+      - setup-and-test

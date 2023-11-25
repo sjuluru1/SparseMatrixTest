@@ -1,7 +1,6 @@
 import pytest
 from sparse_recommender import SparseMatrix
 
-
 def test_set_and_get():
     matrix = SparseMatrix(1, 2)
     matrix.set(1, 2, 3)
